@@ -1,0 +1,201 @@
+<div class="main-content" style="padding: 0px; background-color: black;">
+    <div class="container-fluid" style="padding: 0px;">
+        <div style="position: absolute; z-index: 100; ">
+            <div style="color: white; padding: 8px; font-size: smaller;"><b>Control Node</b></div>
+        </div>
+        <div style="position: absolute; z-index: 100; top: 100px;">
+            <p style="color: white; padding-top : 0px; padding-left : 8px; margin-bottom : 0px; font-size: x-small;">
+                Left-click : rotate , Mouse-wheel / Middle-click : Zoom , Right-click : pan / reset camera</p>
+            <p style="color: white; padding-top : 0px; padding-left : 8px; font-size: x-small;">Click at node : View company information
+            </p>
+        </div>
+        <div style="position: absolute; z-index: 100; top: 150px;">
+            <div style="padding : 8px">
+                <div style="color: white; padding: 0px; font-size: smaller;"><b>Relation Line</b></div>
+                <div style="color: #ff0000; padding: 0px; font-size: x-small;">Supplier-Distributor</div>
+                <div style="color: #cc00ff; padding: 0px; font-size: x-small;">Supplier-Retailer</div>
+                <div style="color: #cccc00; padding: 0px; font-size: x-small;">Supplier-Customer</div>
+                <div style="color: #33cc33; padding: 0px; font-size: x-small;">Distributor-Retailer</div>
+                <div style="color: #0066ff; padding: 0px; font-size: x-small;">Distributor-Customer</div>
+                <div style="color: #cc00ff; padding: 0px; font-size: x-small;">Retailer-Customer</div>
+            </div>
+        </div>
+        <div id="sideFilter" style="overflow-y: auto;">
+            <mat-accordion>
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            Filter
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div id="company_filter" *ngIf="filterView == 'company'">
+                        <div class="input-group no-border">
+                            <button style="width: 100%;" class="btn btn-warning" (click)="switchFilterView()">Switch to industry</button>
+                            <mat-form-field style="width:80%;">
+                                <input #searchInput type="text" class="form-control" placeholder="Search..." matInput [formControl]="searchControl" [matAutocomplete]="auto">
+                                <mat-autocomplete #auto="matAutocomplete">
+                                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                                        {{ option }}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                            <button class="btn btn-white btn-round btn-just-icon" (click)="search(searchInput.value)"><i
+            class="material-icons">search</i></button>
+                        </div>
+                        <mat-divider></mat-divider>
+                        <div class='row' style="margin-top : 8px;">
+                            <div class='col-md-12'>
+                                Filter top rank
+                            </div>
+                        </div>
+                        <div class='row'>
+                            <div class='col-md-9'>
+                                <mat-slider style="width: 100%;" class="example-margin" [disabled]="disabled" [invert]="invert" [max]="max" [min]="min" [step]="step" [thumbLabel]="thumbLabel" [tickInterval]="getSliderTickInterval()" [(ngModel)]="sliderTopRankValue" [vertical]="vertical">
+                                </mat-slider>
+                            </div>
+                            <div class='col-md-3'>
+                                {{sliderTopRankValue}} %
+                            </div>
+                        </div>
+                        <div class='row'>
+                            <div class='col-md-12'>
+                                <button style="width: 100%;" class="btn" (click)="getAllCompanyGraph()">reset</button>
+                                <button style="width: 100%;" class="btn" (click)="getTopCompanyGraph()">get top company</button>
+                                <button style="width: 100%;" class="btn" (click)="getTopRelationGraph()">get top cash flow</button>
+                            </div>
+                        </div>
+                        <mat-divider></mat-divider>
+                        <div class='row' style="margin-top : 8px;">
+                            <div class='col-md-12'>
+                                Filter top cash flow by type
+                            </div>
+                        </div>
+                        <div class='row'>
+                            <div class='col-md-12'>
+                                <button style="width: 100%;" class="btn" *ngFor="let relation of this.configulationList.relationType" (click)="getTopRelationByTypeGraph(relation.name)">{{relation.name}}</button>
+                            </div>
+                        </div>
+                        <mat-divider></mat-divider>
+                        <div class='row' style="margin-top : 8px;">
+                            <div class='col-md-12'>
+                                Filter top company by business category
+                            </div>
+                        </div>
+                        <div class='row'>
+                            <div class='col-md-12'>
+                                <button style="width: 100%;" class="btn" *ngFor="let industry of this.configulationList.industry" (click)="getTopRelationByTypeGraph(industry)">{{industry}}</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="industry_filter" *ngIf="filterView == 'industry'">
+                        <div class="input-group no-border">
+                            <button style="width: 100%;" class="btn btn-warning" (click)="switchFilterView()">Switch to company</button>
+                        </div>
+                    </div>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </div>
+        <div id="sideDetail" style="overflow-y: auto;">
+            <div class="table-responsive" style="background-color: white; margin-top: 0px; padding-left: 16px; padding-right: 16px;">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td style="width: 40%;"><b>Companies</b></td>
+                            <td>{{this.graphData?.nodes?.length}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Cash flow</b></td>
+                            <td>{{this.graphData?.links?.length}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-responsive" style="background-color: white; margin-top: 8px; padding-left: 16px; padding-right: 16px;">
+                <table class="table">
+                    <tbody>
+                        <tr *ngFor="let attr of selectNode?.data | keyvalue">
+                            <td style="width: 40%;" *ngIf="attr.key != 'key' && attr.key != 'relation'">
+                                <b>{{attr.key}}</b>
+                            </td>
+                            <td *ngIf="attr.key != 'created' && attr.key != 'key' && attr.key != 'relation'">
+                                {{attr.value}}
+                            </td>
+                            <td *ngIf="attr.key == 'created' && attr.key != 'key' && attr.key != 'relation'">
+                                {{attr.value._seconds * 1000 | date}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-responsive" style="background-color: white; margin-top: 8px; padding-left: 16px; padding-right: 16px;">
+                <table style="margin-bottom: 0px;" class="table">
+                    <tbody>
+                        <tr>
+                            <td style="width: 40%;">
+                                <b style="color: green;">Inflow cash</b>
+                            </td>
+                            <td>
+                                <b style="color: green;">{{selectNode?.data?.relation?.cashflow?.inflow | number}} THB</b>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b style="color: red;">Outflow cash</b>
+                            </td>
+                            <td>
+                                <b style="color: red;">{{selectNode?.data?.relation?.cashflow?.outflow | number}} THB</b>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="margin-bottom: 8px;">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button class="btn btn-success" (click)="openRelationDetailTemplate()">relation</button>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-warning" (click)="moveCameraToNode(this.selectNode)">focus node</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="graphSpace">
+            <div id='chart'></div>
+        </div>
+    </div>
+</div>
+
+<ng-template #relationDetailTemplate>
+    <div class="relationDialog">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Relation from</th>
+                        <th>Relation to</th>
+                        <th>Relation type</th>
+                        <th>Cash amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let attr of selectNode?.data?.relation?.data">
+                        <td>{{attr.companyFrom_data.name}}</td>
+                        <td>{{attr.companyTo_data.name}}</td>
+                        <td>{{attr.relationType}}</td>
+                        <td *ngIf="attr.companyTo_data.name == selectNode?.data?.name" style="color : green;">
+                            {{attr.cashAmount | number}} THB</td>
+                        <td *ngIf="attr.companyFrom_data.name == selectNode?.data?.name" style="color : red;">
+                            {{attr.cashAmount | number}} THB</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #processTemplate>
+    <div style="text-align: center;">
+        <h4>Please wait</h4>
+    </div>
+</ng-template>

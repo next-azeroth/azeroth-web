@@ -1,0 +1,126 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row justify-content-md-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class='card-header card-header-info'>
+                        <h4>Space</h4>
+                    </div>
+                    <div class='card-body' id="graphSpace">
+                        <div id='chart'></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <mat-accordion>
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                Filter
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="input-group no-border" style="width : 100%;">
+                            <mat-form-field style="width:80%;">
+                                <input #searchInput type="text" class="form-control" placeholder="Search..." matInput [formControl]="searchControl" [matAutocomplete]="auto">
+                                <mat-autocomplete #auto="matAutocomplete">
+                                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                                        {{ option }}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                            <button class="btn btn-white btn-round btn-just-icon" (click)="search(searchInput.value)"><i
+                  class="material-icons">search</i></button>
+                        </div>
+                    </mat-expansion-panel>
+                </mat-accordion>
+                <div class="card">
+                    <div class='card-header card-header-info'>
+                        <h4>Infomation</h4>
+                    </div>
+                    <div class='card-body'>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <tbody>
+                                            <tr *ngFor="let attr of selectNode?.data | keyvalue">
+                                                <td *ngIf="attr.key != 'key' && attr.key != 'relation'">
+                                                    <b>{{attr.key}}</b>
+                                                </td>
+                                                <td *ngIf="attr.key != 'created' && attr.key != 'key' && attr.key != 'relation'">
+                                                    {{attr.value}}
+                                                </td>
+                                                <td *ngIf="attr.key == 'created' && attr.key != 'key' && attr.key != 'relation'">
+                                                    {{attr.value._seconds * 1000 | date}}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class='card-header card-header-info'>
+                        <h4>Relation cash flow</h4>
+                    </div>
+                    <div class='card-body'>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <b style="color: green;">Inflow cash</b>
+                                                </td>
+                                                <td>
+                                                    <b style="color: green;">{{selectNode?.data?.relation?.cashflow?.inflow | number}} THB</b>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <b style="color: red;">Outflow cash</b>
+                                                </td>
+                                                <td>
+                                                    <b style="color: red;">{{selectNode?.data?.relation?.cashflow?.outflow | number}} THB</b>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <button class="btn btn-success" (click)="openRelationDetailTemplate()">view relation</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #relationDetailTemplate>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Relation from</th>
+                    <th>Relation to</th>
+                    <th>Relation type</th>
+                    <th>Cash amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let attr of selectNode?.data?.relation?.data">
+                    <td>{{attr.companyFrom_data.name}}</td>
+                    <td>{{attr.companyTo_data.name}}</td>
+                    <td>{{attr.relationType}}</td>
+                    <td *ngIf="attr.companyTo_data.name == selectNode?.data?.name" style="color : green;">{{attr.cashAmount | number}} THB</td>
+                    <td *ngIf="attr.companyFrom_data.name == selectNode?.data?.name" style="color : red;">{{attr.cashAmount | number}} THB</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</ng-template>

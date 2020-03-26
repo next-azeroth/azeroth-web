@@ -1,0 +1,30 @@
+#sideDetail {
+    position: absolute;
+    z-index: 100;
+    padding-top: 8px;
+    padding-right: 8px;
+    right: 0px;
+    width: 350px;
+    overflow-y: auto;
+    max-height: 80vh;
+}
+
+#sideFilter {
+    position: absolute;
+    z-index: 100;
+    padding-top: 8px;
+    padding-right: 8px;
+    right: 358px;
+    width: 350px;
+    overflow-y: auto;
+    max-height: 80vh;
+}
+
+#relationDialog {
+    position: absolute;
+    z-index: 100;
+    padding-top: 8px;
+    padding-right: 8px;
+    overflow-y: auto;
+    max-height: inherit;
+}

@@ -1,0 +1,176 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card card-stats">
+                    <div class="card-header card-header-warning card-header-icon">
+                        <div class="card-icon">
+                            <i class="material-icons">store</i>
+                        </div>
+                        <p class="card-category">Companies</p>
+                        <div class="card-title">
+                            <h2>{{this.companyList?.length | number}}</h2>
+                            <h4>Companies</h4>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card card-stats">
+                    <div class="card-header card-header-warning card-header-icon">
+                        <div class="card-icon">
+                            <i class="material-icons">local_atm</i>
+                        </div>
+                        <p class="card-category">Company value</p>
+                        <div class="card-title">
+                            <h2>{{getToMillion(companyValue) | number}}</h2>
+                            <h4>Million baht</h4>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card card-stats">
+                    <div class="card-header card-header-info card-header-icon">
+                        <div class="card-icon">
+                            <i class="material-icons">transform</i>
+                        </div>
+                        <p class="card-category">Cash flow</p>
+                        <div class="card-title">
+                            <h2>{{this.relationList?.length | number}}</h2>
+                            <h4>Relations</h4>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card card-stats">
+                    <div class="card-header card-header-success card-header-icon">
+                        <div class="card-icon">
+                            <i class="material-icons">attach_money</i>
+                        </div>
+                        <p class="card-category">Cash flow</p>
+                        <div class="card-title">
+                            <h2>{{getToMillion(relationValue) | number}}</h2>
+                            <h4>Million baht</h4>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class='card-header card-header-info'>
+                        <h4>Companies</h4>
+                    </div>
+                    <div class='card-body'>
+                        <table style="margin-bottom: 0px;" class="table">
+                            <tbody>
+                                <tr>
+                                    <td>Max company value</td>
+                                    <td style="text-align: right;">{{companyMax | number}} Baht</td>
+                                </tr>
+                                <tr>
+                                    <td>Min company value</td>
+                                    <td style="text-align: right;">{{companyMin | number}} Baht</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class='card-header card-header-info'>
+                        <h4>Cash flow</h4>
+                    </div>
+                    <div class='card-body'>
+                        <table style="margin-bottom: 0px;" class="table">
+                            <tbody>
+                                <tr>
+                                    <td>Max cash flow value</td>
+                                    <td style="text-align: right;">{{relationMax | number}} Baht</td>
+                                </tr>
+                                <tr>
+                                    <td>Min cash flow value</td>
+                                    <td style="text-align: right;">{{relationMin | number}} Baht</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class='card-header card-header-info'>
+                        <h4>Industry</h4>
+                    </div>
+                    <div class='card-body'>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <th style="width:30%;">Name</th>
+                                    <th style="width:10%; text-align: right;">Amount</th>
+                                    <th style="width:15%; text-align: right;">Value</th>
+                                    <th style="width:15%; text-align: right;">Internal</th>
+                                    <th style="width:15%; text-align: right;">In</th>
+                                    <th style="width:15%; text-align: right;">Out</th>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let industry of industryList">
+                                        <td>{{ industry.name }}</td>
+                                        <td style="text-align: right;">{{ industry.amount }}</td>
+                                        <td style="text-align: right;">{{ industry.value | number}} Baht</td>
+                                        <td style="text-align: right;">{{ industry.internalFlow | number}} Baht</td>
+                                        <td style="text-align: right;">{{ industry.inFlow | number}} Baht</td>
+                                        <td style="text-align: right;">{{ industry.outFlow | number}} Baht</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class='card-header card-header-info'>
+                        <h4>Cash flow</h4>
+                    </div>
+                    <div class='card-body'>
+                        <table style="margin-bottom: 0px;" class="table">
+                            <thead>
+                                <th style="width:30%;">Type</th>
+                                <th style="text-align: center;">Amount</th>
+                                <th style="text-align: right;">Value</th>
+                                <th style="text-align: right;">Max</th>
+                                <th style="text-align: right;">Min</th>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let relation of this.relationTypeList | keyvalue ">
+                                    <td>{{relation.key}}</td>
+                                    <td style="text-align: center;">{{relation.value['amount']}}</td>
+                                    <td style="text-align: right;">{{relation.value['sum'] | number }} Baht</td>
+                                    <td style="text-align: right;">{{relation.value['max'] | number }} Baht</td>
+                                    <td style="text-align: right;">{{relation.value['min'] | number }} Baht</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,183 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class='card-header card-header-info'>
+                        <h4>Company<span style="position: absolute; right: 8px;"><button class="btn btn-sm btn-success" (click)="openEditCompanyTemplate()"><i class="material-icons">create</i></button><button class="btn btn-sm btn-danger"><i class="material-icons">delete</i></button></span></h4>
+                    </div>
+                    <div class='card-body'>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td style="width : 20%;">
+                                            <b>Name</b>
+                                        </td>
+                                        <td>
+                                            {{this.company?.company.name}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <b>Tax id</b>
+                                        </td>
+                                        <td>
+                                            {{this.company?.company.taxId}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <b>Group</b>
+                                        </td>
+                                        <td>
+                                            {{this.company?.company.group}}
+                                            <span style="margin-left: 16px;" *ngIf="this.company?.company.group !== this.company?.company.name"><button class="btn btn-success">view company group</button></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <b>Company value</b>
+                                        </td>
+                                        <td>
+                                            {{this.company?.company.value | number}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <b>Industry</b>
+                                        </td>
+                                        <td>
+                                            {{this.company?.company.industry}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <b>Country</b>
+                                        </td>
+                                        <td>
+                                            {{this.company?.company.country}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class='card-header card-header-info'>
+                        <h4>Relation</h4>
+                    </div>
+                    <div class='card-body'>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <th>From</th>
+                                    <th>To</th>
+                                    <th>Relation type</th>
+                                    <th>Relation detail</th>
+                                    <th>Value</th>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let relation of this.company?.relation">
+                                        <td>{{relation.companyFrom_data.name}}</td>
+                                        <td>{{relation.companyTo_data.name}}</td>
+                                        <td>{{relation.relationType}}</td>
+                                        <td>{{relation.relationDetail}}</td>
+                                        <td *ngIf="relation.companyTo == this.companyId" style="color : green;">{{relation.cashAmount | number}} THB</td>
+                                        <td *ngIf="relation.companyFrom == this.companyId" style="color : red;">{{relation.cashAmount | number}} THB</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #editCompanyTemplate>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class='card-header card-header-info'>
+                    <h4>Edit company</h4>
+                </div>
+                <div class='card-body'>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="taxId">Tax id</label>
+                            <mat-form-field>
+                                <input matInput id="taxId" name="taxId" placeholder="Enter company taxId" type="text" [(ngModel)]="this.company.company.taxId" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="name">Name</label>
+                            <mat-form-field>
+                                <input matInput id="name" name="name" placeholder="Enter company name" type="text" [(ngModel)]="this.company.company.name" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="companyGroup">Company group</label>
+                            <mat-form-field>
+                                <mat-select name="companyGroup" [(ngModel)]="this.company.company.companyGroup">
+                                    <mat-option *ngFor="let group of companyGroupList" value="{{group.name}}">{{group.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="industry">Industry</label>
+                            <mat-form-field>
+                                <mat-select name="industry" [(ngModel)]="this.company.company.industry">
+                                    <mat-option *ngFor="let industry of configulationList.industry" value="{{industry.name}}">{{industry.name}} - {{industry.description}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="country">Country</label>
+                            <mat-form-field>
+                                <input matInput id="country" name="country" placeholder="Enter company country" type="text" [(ngModel)]="this.company.company.profile.country" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="country">No of Member</label>
+                            <mat-form-field>
+                                <input matInput id="member" name="member" placeholder="Enter company's member" type="text" [(ngModel)]="this.company.company.profile.member" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="value">Value</label>
+                            <mat-form-field>
+                                <input matInput id="value" name="value" placeholder="Enter company value" type="text" [(ngModel)]="this.company.company.value" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button type="submit" class="btn btn-info pull-left" (click)="editCompany()">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

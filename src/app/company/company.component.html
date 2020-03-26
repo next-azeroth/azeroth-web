@@ -1,0 +1,313 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row" style="padding-left: 16px;">
+            <button class="btn btn-success" (click)="openCreateCompanyGroupTemplate()">new company group</button>
+            <button class="btn btn-success" (click)="openCreateCompanyTemplate()">new company</button>
+            <button class="btn btn-success" (click)="openCreateRelationTemplate()">new relation</button>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row justify-content-md-center">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class='card-header card-header-info'>
+                        <h4>Company</h4>
+                    </div>
+                    <div class='card-body'>
+                        <mat-form-field>
+                            <mat-label>Filter</mat-label>
+                            <input matInput (keyup)="applyCompanyFilter($event)" placeholder="Ex. AIS">
+                        </mat-form-field>
+                        <div class="table-responsive table table-hover">
+                            <table mat-table [dataSource]="companyListDataSource" class="table">
+                                <ng-container matColumnDef="name">
+                                    <th mat-header-cell *matHeaderCellDef style="width : 30%;"> Name </th>
+                                    <td mat-cell *matCellDef="let element">{{element.name}}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="group">
+                                    <th mat-header-cell *matHeaderCellDef style="width : 30%;"> Group </th>
+                                    <td mat-cell *matCellDef="let element">{{element.group}}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="industry">
+                                    <th mat-header-cell *matHeaderCellDef style="width : 10%;"> Industry </th>
+                                    <td mat-cell *matCellDef="let element">{{element.industry}}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="value">
+                                    <th mat-header-cell *matHeaderCellDef style="width : 10%;"> Value </th>
+                                    <td mat-cell *matCellDef="let element">{{element.value | number}}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="date">
+                                    <th mat-header-cell *matHeaderCellDef style="width : 10%;"> Date </th>
+                                    <td mat-cell *matCellDef="let element">{{(element.created?._seconds * 1000) | date}}</td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="companyListColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: companyListColumns;" [routerLink]="[ '/company-detail' , row.key]"></tr>
+                            </table>
+                            <mat-paginator #companyListPaginator [pageSize]='10' showFirstLastButtons></mat-paginator>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row justify-content-md-center">
+            <div class="card">
+                <div class='card-header card-header-info'>
+                    <h4>Relation</h4>
+                </div>
+                <div class='card-body'>
+                    <div class="table-responsive table table-hover">
+                        <mat-form-field>
+                            <mat-label>Filter</mat-label>
+                            <input matInput (keyup)="applyRelationFilter($event)" placeholder="Ex. AIS">
+                        </mat-form-field>
+                        <table mat-table [dataSource]="relationListDataSource" class="table">
+                            <ng-container matColumnDef="companyFrom">
+                                <th mat-header-cell *matHeaderCellDef style="width : 20%; text-align: left;"> Relation From </th>
+                                <td mat-cell *matCellDef="let element" style="text-align: left;">{{element.companyFrom_data.name}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="companyTo">
+                                <th mat-header-cell *matHeaderCellDef style="width : 20%; text-align: right;"> Relation To </th>
+                                <td mat-cell *matCellDef="let element" style="text-align: right;">{{element.companyTo_data.name}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="relationType">
+                                <th mat-header-cell *matHeaderCellDef style="width : 10%; text-align: right;"> Relation Type </th>
+                                <td mat-cell *matCellDef="let element" style="text-align: right;">{{element.relationType}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="relationDetail">
+                                <th mat-header-cell *matHeaderCellDef style="width : 20%; text-align: center;"> Relation Detail </th>
+                                <td mat-cell *matCellDef="let element" style="text-align: center;">{{element.relationDetail}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="cashAmount">
+                                <th mat-header-cell *matHeaderCellDef style="width : 10%; text-align: right;"> Cash Amount </th>
+                                <td mat-cell *matCellDef="let element" style="text-align: right;">{{element.cashAmount | number}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="date">
+                                <th mat-header-cell *matHeaderCellDef style="width : 10%; text-align: right;"> Date </th>
+                                <td mat-cell *matCellDef="let element" style="text-align: right;">{{(element.created._seconds * 1000) | date}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="action">
+                                <th mat-header-cell *matHeaderCellDef style="width : 10%; text-align: right;"> </th>
+                                <td mat-cell *matCellDef="let element" style="text-align: right;"><button class="btn btn-sm btn-info"><i class="material-icons">create</i></button><button class="btn btn-sm btn-danger"><i class="material-icons">delete</i></button></td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="relationListColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: relationListColumns;"></tr>
+                        </table>
+                        <mat-paginator #relationListPaginator [pageSize]='10' showFirstLastButtons></mat-paginator>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #processTemplate>
+    <div style="text-align: center;">
+
+    </div>
+</ng-template>
+
+<ng-template #completeTemplate>
+    <div class="row" style="height: 10vh;">
+        <div class="col-md-12">
+            <h4 style="text-align: center;">Complete</h4>
+        </div>
+    </div>
+    <div class="row" style="height: 10vh;">
+        <div class="col-md-12" style="text-align: center;">
+            <button class="btn btn-success">OK</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #errorTemplate>
+    <div class="row" style="height: 10vh;">
+        <div class="col-md-12">
+            <h4 style="text-align: center;">{{errorMessage}}</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <button style="width: 100%;" class="btn btn-danger" (click)="this.errorDialogRef.close()">OK</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #createCompanyGroupTemplate>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class='card-header card-header-info'>
+                    <h4>Create company group</h4>
+                </div>
+                <div class='card-body'>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #createCompanyTemplate>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class='card-header card-header-info'>
+                    <h4>Create company</h4>
+                </div>
+                <div class='card-body'>
+                    <form (ngSubmit)="createCompany(createCompanyForm)" #createCompanyForm="ngForm" role="form">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="taxId">Tax id</label>
+                                <mat-form-field>
+                                    <input matInput id="taxId" name="taxId" placeholder="Enter company taxId" type="text" ngModel />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="name">Name</label>
+                                <mat-form-field>
+                                    <input matInput id="name" name="name" placeholder="Enter company name" type="text" ngModel />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="companyGroup">Company group</label>
+                                <mat-form-field>
+                                    <mat-select name="companyGroup" ngModel>
+                                        <mat-option *ngFor="let group of companyGroupList" value="{{group.name}}">{{group.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="industry">Industry</label>
+                                <mat-form-field>
+                                    <mat-select name="industry" ngModel>
+                                        <mat-option *ngFor="let industry of configulationList.industry" value="{{industry.name}}">{{industry.name}} - {{industry.description}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="country">Country</label>
+                                <mat-form-field>
+                                    <input matInput id="country" name="country" placeholder="Enter company country" type="text" ngModel />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="country">No of Member</label>
+                                <mat-form-field>
+                                    <input matInput id="member" name="member" placeholder="Enter company's member" type="text" ngModel />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="value">Value</label>
+                                <mat-form-field>
+                                    <input matInput id="value" name="value" placeholder="Enter company value" type="text" ngModel />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-info pull-left">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #createRelationTemplate>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class='card-header card-header-info'>
+                    <h4>Create relation</h4>
+                </div>
+                <div class='card-body'>
+                    <form (ngSubmit)="createRelation(createRelationForm)" #createRelationForm="ngForm" role="form">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="companyFrom">From</label>
+                                <mat-form-field>
+                                    <mat-select name="companyFrom" ngModel>
+                                        <mat-option *ngFor="let company of companyList" value="{{company.key}}">{{company.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="companyTo">To</label>
+                                <mat-form-field>
+                                    <mat-select name="companyTo" ngModel>
+                                        <mat-option *ngFor="let company of companyList" value="{{company.key}}">{{company.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="relationType">Relationtype</label>
+                                <mat-form-field>
+                                    <mat-select name="relationType" ngModel>
+                                        <mat-option *ngFor="let relation of configulationList.relationType" value="{{relation.name}}">
+                                            {{relation.name}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="cashActivity">Relation detail</label>
+                                <mat-form-field>
+                                    <input matInput id="relationDetail" name="relationDetail" placeholder="Enter detail" type="text" ngModel />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="cashAmount">Cash amount</label>
+                                <mat-form-field>
+                                    <input matInput id="cashAmount" name="cashAmount" placeholder="Enter cash amount" type="text" ngModel />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-info pull-left">Submit</button>
+                                <!-- <button class="btn btn-danger pull-left" (click)="viewAllResource()">View all</button> -->
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
