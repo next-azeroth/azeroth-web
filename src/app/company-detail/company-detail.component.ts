@@ -86,7 +86,7 @@ export class CompanyDetailComponent implements OnInit {
   @ViewChild("createRelationTemplate", { static: true })
   public createRelationTemplate: TemplateRef<any>;
   createRelationTemplateRef: MatDialogRef<any>;
-  openCreateRelationTemplate(relation : any): void {
+  openCreateRelationTemplate(): void {
     this.createRelationTemplateRef = this.dialog.open(this.createRelationTemplate, {
       width: '800px'
     });
