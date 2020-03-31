@@ -4,7 +4,10 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class='card-header card-header-info'>
-                        <h4>Company<span style="position: absolute; right: 8px;"><button class="btn btn-sm btn-success" (click)="openEditCompanyTemplate()"><i class="material-icons">create</i></button><button class="btn btn-sm btn-danger"><i class="material-icons">delete</i></button></span></h4>
+                        <h4>Company<span style="position: absolute; right: 8px;">
+                          <button class="btn btn-sm btn-success" (click)="openEditCompanyTemplate()"><i class="material-icons">create</i></button>
+                          <button class="btn btn-sm btn-danger" (click)="deleteCompany()"><i class="material-icons">delete</i></button>
+                        </span></h4>
                     </div>
                     <div class='card-body'>
                         <div class="table-responsive">
@@ -14,7 +17,7 @@
                                         <td style="width : 20%;">
                                             <b>Name</b>
                                         </td>
-                                        <td>
+                                        <td style="width : 80%;">
                                             {{this.company?.company.name}}
                                         </td>
                                     </tr>
@@ -32,7 +35,7 @@
                                         </td>
                                         <td>
                                             {{this.company?.company.group}}
-                                            <span style="margin-left: 16px;" *ngIf="this.company?.company.group !== this.company?.company.name"><button class="btn btn-success">view company group</button></span>
+                                            <span style="position: absolute; right: 16px; margin-right: 16px;" *ngIf="this.company?.company.group !== this.company?.company.name"><button class="btn btn-link btn-success" style="padding: 0px;">view company group</button></span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -56,7 +59,15 @@
                                             <b>Country</b>
                                         </td>
                                         <td>
-                                            {{this.company?.company.country}}
+                                            {{this.company?.company.profile.country}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <b>Member</b>
+                                        </td>
+                                        <td>
+                                            {{this.company?.company.profile.member}}
                                         </td>
                                     </tr>
                                 </tbody>
@@ -70,7 +81,9 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class='card-header card-header-info'>
-                        <h4>Relation</h4>
+                        <h4>Relation<span style="position: absolute; right: 8px;">
+                          <button class="btn btn-sm btn-success" (click)="openCreateRelationTemplate()"><i class="material-icons">add</i></button>
+                        </span></h4>
                     </div>
                     <div class='card-body'>
                         <div class="table-responsive">
@@ -81,6 +94,7 @@
                                     <th>Relation type</th>
                                     <th>Relation detail</th>
                                     <th>Value</th>
+                                    <th style='width: 10%;'></th>
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let relation of this.company?.relation">
@@ -90,6 +104,10 @@
                                         <td>{{relation.relationDetail}}</td>
                                         <td *ngIf="relation.companyTo == this.companyId" style="color : green;">{{relation.cashAmount | number}} THB</td>
                                         <td *ngIf="relation.companyFrom == this.companyId" style="color : red;">{{relation.cashAmount | number}} THB</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-success" (click)="openEditRelationTemplate(relation)"><i class="material-icons">create</i></button>
+                                            <button class="btn btn-sm btn-danger" (click)="deleteRelation(relation)"><i class="material-icons">delete</i></button>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -110,15 +128,13 @@
                 </div>
                 <div class='card-body'>
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <label for="taxId">Tax id</label>
                             <mat-form-field>
                                 <input matInput id="taxId" name="taxId" placeholder="Enter company taxId" type="text" [(ngModel)]="this.company.company.taxId" />
                             </mat-form-field>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <label for="name">Name</label>
                             <mat-form-field>
                                 <input matInput id="name" name="name" placeholder="Enter company name" type="text" [(ngModel)]="this.company.company.name" />
@@ -126,7 +142,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <label for="companyGroup">Company group</label>
                             <mat-form-field>
                                 <mat-select name="companyGroup" [(ngModel)]="this.company.company.companyGroup">
@@ -135,9 +151,7 @@
                                 </mat-select>
                             </mat-form-field>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <label for="industry">Industry</label>
                             <mat-form-field>
                                 <mat-select name="industry" [(ngModel)]="this.company.company.industry">
@@ -148,15 +162,13 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <label for="country">Country</label>
                             <mat-form-field>
                                 <input matInput id="country" name="country" placeholder="Enter company country" type="text" [(ngModel)]="this.company.company.profile.country" />
                             </mat-form-field>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <label for="country">No of Member</label>
                             <mat-form-field>
                                 <input matInput id="member" name="member" placeholder="Enter company's member" type="text" [(ngModel)]="this.company.company.profile.member" />
@@ -176,6 +188,151 @@
                             <button type="submit" class="btn btn-info pull-left" (click)="editCompany()">Submit</button>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #completeTemplate>
+    <div class="row" style="height: 10vh;">
+        <div class="col-md-12">
+            <h4 style="text-align: center;">Complete</h4>
+        </div>
+    </div>
+    <div class="row" style="height: 10vh;">
+        <div class="col-md-12" style="text-align: center;">
+            <button class="btn btn-success" (click)="completeDialogRef.close()">OK</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #editRelationTemplate>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class='card-header card-header-info'>
+                    <h4>Edit relation</h4>
+                </div>
+                <div class='card-body'>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="companyFrom">From</label>
+                            <mat-form-field>
+                                <input matInput id="companyFrom" name="companyFrom" type="text" [(ngModel)]="selectRelation.companyFrom_data.name" disabled />
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-12">
+                            <label for="companyTo">To</label>
+                            <mat-form-field>
+                                <input matInput id="companyTo" name="companyTo" type="text" [(ngModel)]="selectRelation.companyTo_data.name" disabled />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="relationType">Relationtype</label>
+                            <mat-form-field>
+                                <mat-select name="relationType" [(ngModel)]="selectRelation.relationType">
+                                    <mat-option *ngFor="let relation of configulationList.relationType" value="{{relation.name}}">
+                                        {{relation.name}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="cashActivity">Relation detail</label>
+                            <mat-form-field>
+                                <input matInput id="relationDetail" name="relationDetail" placeholder="Enter detail" type="text" [(ngModel)]="selectRelation.relationDetail" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="cashAmount">Cash amount</label>
+                            <mat-form-field>
+                                <input matInput id="cashAmount" name="cashAmount" placeholder="Enter cash amount" type="text" [(ngModel)]="selectRelation.cashAmount" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button type="submit" class="btn btn-info pull-left" (click)="editRelation()">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #createRelationTemplate>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class='card-header card-header-info'>
+                    <h4>Create relation</h4>
+                </div>
+                <div class='card-body'>
+                    <form (ngSubmit)="createRelation(createRelationForm)" #createRelationForm="ngForm" role="form">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="companyFrom">Relation</label>
+                                <mat-form-field>
+                                    <mat-select name="relationWay" ngModel>
+                                        <mat-option value="from">Relation From other company</mat-option>
+                                        <mat-option value="from">Relation To other company</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <mat-form-field>
+                                    <label for="companyFrom">Other company</label>
+                                    <mat-select name="otherCompany" ngModel>
+                                        <mat-option *ngFor="let company of companyList" value="{{company.key}}">{{company.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <mat-form-field>
+                                    <label for="relationType">Relationtype</label>
+
+                                    <mat-select name="relationType" ngModel>
+                                        <mat-option *ngFor="let relation of configulationList.relationType" value="{{relation.name}}">
+                                            {{relation.name}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="cashActivity">Relation detail</label>
+                                <mat-form-field>
+                                    <input matInput id="relationDetail" name="relationDetail" placeholder="Enter detail" type="text" ngModel />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="cashAmount">Cash amount</label>
+                                <mat-form-field>
+                                    <input matInput id="cashAmount" name="cashAmount" placeholder="Enter cash amount" type="text" ngModel />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-info pull-left">Submit</button>
+                                <!-- <button class="btn btn-danger pull-left" (click)="viewAllResource()">View all</button> -->
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

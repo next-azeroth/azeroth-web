@@ -45,8 +45,13 @@
                                     <td mat-cell *matCellDef="let element">{{(element.created?._seconds * 1000) | date}}</td>
                                 </ng-container>
 
+                                <ng-container matColumnDef="action">
+                                    <th mat-header-cell *matHeaderCellDef style="width : 10%;"></th>
+                                    <td mat-cell *matCellDef="let element"><button class="btn btn-sm btn-info" (click)="route.navigate(['company-detail' , element.key])"><i class="material-icons">create</i></button></td>
+                                </ng-container>
+
                                 <tr mat-header-row *matHeaderRowDef="companyListColumns"></tr>
-                                <tr mat-row *matRowDef="let row; columns: companyListColumns;" [routerLink]="[ '/company-detail' , row.key]"></tr>
+                                <tr mat-row *matRowDef="let row; columns: companyListColumns;"></tr>
                             </table>
                             <mat-paginator #companyListPaginator [pageSize]='10' showFirstLastButtons></mat-paginator>
                         </div>
@@ -96,11 +101,6 @@
                             <ng-container matColumnDef="date">
                                 <th mat-header-cell *matHeaderCellDef style="width : 10%; text-align: right;"> Date </th>
                                 <td mat-cell *matCellDef="let element" style="text-align: right;">{{(element.created._seconds * 1000) | date}}</td>
-                            </ng-container>
-
-                            <ng-container matColumnDef="action">
-                                <th mat-header-cell *matHeaderCellDef style="width : 10%; text-align: right;"> </th>
-                                <td mat-cell *matCellDef="let element" style="text-align: right;"><button class="btn btn-sm btn-info"><i class="material-icons">create</i></button><button class="btn btn-sm btn-danger"><i class="material-icons">delete</i></button></td>
                             </ng-container>
 
                             <tr mat-header-row *matHeaderRowDef="relationListColumns"></tr>

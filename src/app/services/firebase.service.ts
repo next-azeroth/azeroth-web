@@ -26,7 +26,9 @@ export class FirebaseService {
         'createCompany' : 'createCompany/',
         'getCompany' : 'getCompany/',
         'getCompanyInGroup' : 'getCompanyInGroup/' ,
-        'getIndustry' : 'getIndustry/'
+        'getIndustry' : 'getIndustry/',
+        'editCompany' : 'editCompany/',
+        'deleteCompany' : 'deleteCompany/'
       }
     },
     'relationService' : {
@@ -34,7 +36,9 @@ export class FirebaseService {
       service : {
         'getRelationList' : 'getRelationList/' ,
         'createRelation' : 'createRelation/' ,
-        'getRelationByCompany' : 'getRelationByCompany/'
+        'getRelationByCompany' : 'getRelationByCompany/' ,
+        'editRelation' : 'editRelation/' ,
+        'deleteRelation' : 'deleteRelation/'
       }
     },
     'configulationService' : {

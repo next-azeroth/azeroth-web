@@ -46,11 +46,11 @@ export class CompanyComponent implements OnInit {
   relationList: any = []
 
   companyListDataSource: MatTableDataSource<CompanyListDataType>;
-  companyListColumns = ['name', 'group', 'industry', 'value', 'date']
+  companyListColumns = ['name', 'group', 'industry', 'value', 'date' , 'action']
   companyListLength : any
 
   relationListDataSource: MatTableDataSource<RelationListDataType>;
-  relationListColumns = ['companyFrom', 'companyTo', 'relationType', 'relationDetail', 'cashAmount', 'date' , 'action']
+  relationListColumns = ['companyFrom', 'companyTo', 'relationType', 'relationDetail', 'cashAmount', 'date']
   relationListLength : any
 
   ngOnInit(): void {
