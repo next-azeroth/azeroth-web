@@ -32,6 +32,11 @@ export class SpaceComponent implements OnInit {
   private processTemplate: TemplateRef<any>;
   processTemplateRef: MatDialogRef<any>;
 
+
+  @ViewChild("profileTemplate", { static: true })
+  private profileTemplate: TemplateRef<any>;
+  profileTemplateRef: MatDialogRef<any>;
+
   relationList: any = []
   companyList: any = []
   companyGroupList: any = []
@@ -110,6 +115,15 @@ export class SpaceComponent implements OnInit {
     });
 
     this.processTemplateRef.afterClosed();
+  }
+
+
+  openProfileTemplate(): void {
+    this.profileTemplateRef = this.dialog.open(this.profileTemplate, {
+      width: '60vw'
+    });
+
+    this.profileTemplateRef.afterClosed();
   }
 
   private _filter(value: string): string[] {
@@ -273,18 +287,18 @@ export class SpaceComponent implements OnInit {
         }
       )
 
-      group.companyInGroup.forEach(compInGroup => {
-        this.graphData.links.push(
-          {
-            source: group.key,
-            target: compInGroup.key,
-            data: {
-              'relationType': 'Company Group',
-              'cashAmount': 0
-            }
-          }
-        )
-      });
+      // group.companyInGroup.forEach(compInGroup => {
+      //   this.graphData.links.push(
+      //     {
+      //       source: group.key,
+      //       target: compInGroup.key,
+      //       data: {
+      //         'relationType': 'Company Group',
+      //         'cashAmount': 0
+      //       }
+      //     }
+      //   )
+      // });
     });
 
   }
@@ -731,6 +745,10 @@ export class SpaceComponent implements OnInit {
       this.getAllCompanyGraph()
     }
 
+  }
+
+  getCompanyProfileListKey(){
+    return Object.keys(this.selectNode.data.profile)
   }
 
 

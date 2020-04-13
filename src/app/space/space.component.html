@@ -117,11 +117,17 @@
                             <td style="width: 40%;" *ngIf="attr.key != 'key' && attr.key != 'relation'">
                                 <b>{{attr.key}}</b>
                             </td>
-                            <td *ngIf="attr.key != 'created' && attr.key != 'key' && attr.key != 'relation'">
+                            <td *ngIf="attr.key != 'created' && attr.key != 'key' && attr.key != 'relation' && attr.key != 'profile' && attr.key != 'value' ">
                                 {{attr.value}}
                             </td>
                             <td *ngIf="attr.key == 'created' && attr.key != 'key' && attr.key != 'relation'">
                                 {{attr.value._seconds * 1000 | date}}
+                            </td>
+                            <td *ngIf="attr.key == 'value' && attr.key != 'key' && attr.key != 'relation'">
+                                {{attr.value | number}} Baht
+                            </td>
+                            <td *ngIf="attr.key == 'profile' && attr.key != 'key' && attr.key != 'relation'">
+                                <button class="btn btn-info btn-sm" (click)="openProfileTemplate()"><i class="material-icons">search</i></button>
                             </td>
                         </tr>
                     </tbody>
@@ -197,5 +203,30 @@
 <ng-template #processTemplate>
     <div style="text-align: center;">
         <h4>Please wait</h4>
+    </div>
+</ng-template>
+
+<ng-template #profileTemplate>
+    <div class="relationDialog">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let profile of this.selectNode?.data?.profile | keyvalue">
+                        <td>
+                            {{profile.key}}
+                        </td>
+                        <td>
+                            {{profile.value}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </ng-template>
