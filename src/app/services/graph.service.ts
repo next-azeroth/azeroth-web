@@ -19,12 +19,14 @@ export class GraphService {
 
     let size = 0
 
-    if (node.data.value <= 1000000) {
+    if (node.data.value < 1000000) {
       size = 1
-    } else if (node.data.value <= 10000000) {
+    } else if (node.data.value < 10000000) {
       size = 4
-    } else if (node.data.value <= 1000000000) {
+    } else if (node.data.value < 1000000000) {
       size = 10
+    } else if (node.data.value < 100000000000) {
+      size = 20
     } else {
       size = 40
     }
