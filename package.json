@@ -36,7 +36,7 @@
         "d3-force-3d": "^2.0.3",
         "firebase": "^7.2.1",
         "jquery": "^3.4.1",
-        "moment": "2.24.0",
+        "moment": "2.29.2",
         "ngx-bootstrap": "^5.1.1",
         "perfect-scrollbar": "1.4.0",
         "popper.js": "1.15.0",
